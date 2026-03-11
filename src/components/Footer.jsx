@@ -1,0 +1,28 @@
+import React from 'react';
+import { useTheme } from '../ThemeContext';
+
+export const Footer = () => {
+  const { colors } = useTheme();
+
+  return (
+    <footer id="footer" style={{ position: 'relative', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '2rem', overflow: 'hidden', clipPath: 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)' }}>
+      <div className="footer-content" style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', height: '100vh', zIndex: -1, pointerEvents: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', paddingBottom: '2rem' }}>
+        <div className="footer-title" style={{ width: '100%', textAlign: 'center', fontFamily: 'Bebas Neue', fontSize: 'clamp(6rem, 25vw, 32rem)', color: colors.fg, lineHeight: 0.8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', transition: 'transform 0.3s' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+            <span>PSY</span>
+            <div style={{ width: 'clamp(3rem, 12vw, 15rem)', height: 'clamp(3rem, 12vw, 15rem)', borderRadius: '50%', border: `clamp(6px, 2vw, 24px) solid ${colors.fg}`, margin: '0 clamp(0.5rem, 2vw, 2rem)' }} />
+            <span>DRZ</span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 clamp(1rem, 4vw, 3rem)', marginTop: '2rem' }}>
+          <div style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', color: colors.muted, textTransform: 'uppercase' }}>© 2025 ADITYA SRIVASTAVA</div>
+          <div style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', color: colors.muted, textTransform: 'uppercase' }}>BASED IN INDIA</div>
+          <div style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', color: colors.muted, textTransform: 'uppercase' }}>DESIGNED & ENGINEERED FROM SCRATCH</div>
+        </div>
+      </div>
+      
+      {/* Spacer to push content down and reveal fixed background */}
+      <div style={{ flex: 1 }} />
+    </footer>
+  );
+};

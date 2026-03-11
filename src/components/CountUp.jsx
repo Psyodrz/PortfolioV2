@@ -1,0 +1,85 @@
+/* CountUp — Real React Bits source from reactbits.dev (JS-CSS variant) */
+import { useInView, useMotionValue, useSpring } from 'framer-motion';
+import { useCallback, useEffect, useRef } from 'react';
+
+export default function CountUp({
+  to,
+  from = 0,
+  direction = 'up',
+  delay = 0,
+  duration = 2,
+  className = '',
+  startWhen = true,
+  separator = '',
+  onStart,
+  onEnd,
+  style = {},
+  // Legacy prop aliases
+  end,
+  start
+}) {
+  const targetTo = end !== undefined ? end : to;
+  const targetFrom = start !== undefined ? start : from;
+
+  const ref = useRef(null);
+  const motionValue = useMotionValue(direction === 'down' ? targetTo : targetFrom);
+
+  const damping = 20 + 40 * (1 / duration);
+  const stiffness = 100 * (1 / duration);
+
+  const springValue = useSpring(motionValue, { damping, stiffness });
+  const isInView = useInView(ref, { once: true, margin: '0px' });
+
+  const getDecimalPlaces = num => {
+    const str = num.toString();
+    if (str.includes('.')) {
+      const d = str.split('.')[1];
+      if (parseInt(d) !== 0) return d.length;
+    }
+    return 0;
+  };
+
+  const maxDecimals = Math.max(getDecimalPlaces(targetFrom), getDecimalPlaces(targetTo));
+
+  const formatValue = useCallback(
+    latest => {
+      const hasDecimals = maxDecimals > 0;
+      const options = {
+        useGrouping: !!separator,
+        minimumFractionDigits: hasDecimals ? maxDecimals : 0,
+        maximumFractionDigits: hasDecimals ? maxDecimals : 0
+      };
+      const formattedNumber = Intl.NumberFormat('en-US', options).format(latest);
+      return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
+    },
+    [maxDecimals, separator]
+  );
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.textContent = formatValue(direction === 'down' ? targetTo : targetFrom);
+    }
+  }, [targetFrom, targetTo, direction, formatValue]);
+
+  useEffect(() => {
+    if (isInView && startWhen) {
+      if (typeof onStart === 'function') onStart();
+      const timeoutId = setTimeout(() => {
+        motionValue.set(direction === 'down' ? targetFrom : targetTo);
+      }, delay * 1000);
+      const durationTimeoutId = setTimeout(() => {
+        if (typeof onEnd === 'function') onEnd();
+      }, delay * 1000 + duration * 1000);
+      return () => { clearTimeout(timeoutId); clearTimeout(durationTimeoutId); };
+    }
+  }, [isInView, startWhen, motionValue, direction, targetFrom, targetTo, delay, onStart, onEnd, duration]);
+
+  useEffect(() => {
+    const unsubscribe = springValue.on('change', latest => {
+      if (ref.current) ref.current.textContent = formatValue(latest);
+    });
+    return () => unsubscribe();
+  }, [springValue, formatValue]);
+
+  return <span className={className} style={style} ref={ref} />;
+}
