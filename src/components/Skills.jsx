@@ -8,15 +8,15 @@ import { useTheme } from '../ThemeContext';
 
 const CONFIG = {
   maxParticles: 40000,
-  particleSize: 2.8,
+  particleSize: 1.6,
   morphSpeed: 1.5,
   explosionForce: 0.5,
   primaryColor: "#00f3ff",
   secondaryColor: "#ff0055",
   bgColor: "#030305",
-  bloomStrength: 3.2,
-  bloomRadius: 0.8,
-  bloomThreshold: 0.0
+  bloomStrength: 1.2,
+  bloomRadius: 0.5,
+  bloomThreshold: 0.1
 };
 
 // ─── All 25 Skills ────────────────────────────────────────────────────────────
@@ -222,7 +222,7 @@ class SkillsParticleSystem {
           points.push(
             (ix / width - 0.5) * 10,
             ((height - iy) / height - 0.5) * 10,
-            (Math.random() - 0.5) * 4.5
+            (Math.random() - 0.5) * 2.0
           );
         }
       }
@@ -332,7 +332,7 @@ class SkillsParticleSystem {
     this.renderer.setSize(width, height);
     if (this.composer) this.composer.setSize(width, height);
     const isMobile = width < 768;
-    this.material.uniforms.uSize.value = isMobile ? CONFIG.particleSize * 2.5 : CONFIG.particleSize;
+    this.material.uniforms.uSize.value = isMobile ? CONFIG.particleSize * 1.8 : CONFIG.particleSize;
     this.camera.position.z = isMobile ? 35 : 30;
   }
 
