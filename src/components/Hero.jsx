@@ -109,7 +109,7 @@ export const Hero = ({ phase }) => {
 
         <div className="hero-center-group" style={{ position:'relative' }}>
           <div className="hero-avatar" style={{ position:'absolute', top:'-clamp(10rem,28vw,40rem)', right:'clamp(0em,5vw,10%)', width:'clamp(10rem,35vw,42rem)', zIndex:5, pointerEvents:'none', animation:'fadeIn 1s 1.2s both, avatarFloat 6s ease-in-out infinite' }}>
-            <img src="/avatar.png" alt={`${IDENTITY.fullName} Avatar`} style={{ width:'100%', height:'auto', filter:'drop-shadow(0 30px 45px rgba(0,0,0,0.6))' }} />
+            <img src={`${import.meta.env.BASE_URL}avatar.png`} alt={`${IDENTITY.fullName} Avatar`} style={{ width:'100%', height:'auto', filter:'drop-shadow(0 30px 45px rgba(0,0,0,0.6))' }} />
           </div>
           <div style={{ overflow:'hidden' }}>
             <div className="name-line" style={{ fontFamily:'Bebas Neue', fontSize:'clamp(4.5rem,14vw,16rem)', lineHeight:0.85, letterSpacing:'-0.015em', color:colors.fg, animation:'slideUp 1s cubic-bezier(0.16,1,0.3,1) 0.2s both' }}>
