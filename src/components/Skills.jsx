@@ -8,7 +8,7 @@ import { useTheme } from '../ThemeContext';
 
 const CONFIG = {
   maxParticles: 40000,
-  particleSize: 2.0,
+  particleSize: 2.8,
   morphSpeed: 1.5,
   explosionForce: 0.5,
   primaryColor: "#00f3ff",
@@ -214,7 +214,7 @@ class SkillsParticleSystem {
   scanCanvas(width, height) {
     const data = this.canvasCtx.getImageData(0, 0, width, height).data;
     const points = [];
-    const gap = 3;
+    const gap = 2;
     for (let iy = 0; iy < height; iy += gap) {
       for (let ix = 0; ix < width; ix += gap) {
         const idx = (iy * width + ix) * 4;
@@ -222,7 +222,7 @@ class SkillsParticleSystem {
           points.push(
             (ix / width - 0.5) * 10,
             ((height - iy) / height - 0.5) * 10,
-            (Math.random() - 0.5) * 1.5
+            (Math.random() - 0.5) * 4.5
           );
         }
       }
