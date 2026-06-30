@@ -14,20 +14,20 @@ export const CustomCursor = () => {
     let rafId;
 
     const move = (e) => { dotX = e.clientX; dotY = e.clientY; };
-    const hoverOn = () => { isHovering = true; };
-    const hoverOff = () => { isHovering = false; };
+    const hoverOn = (e) => {
+      if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
+        isHovering = true;
+      }
+    };
+    const hoverOff = (e) => {
+      if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
+        isHovering = false;
+      }
+    };
 
     window.addEventListener('mousemove', move);
-    document.documentElement.addEventListener('mouseover', (e) => {
-      if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
-        hoverOn();
-      }
-    });
-    document.documentElement.addEventListener('mouseout', (e) => {
-      if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
-        hoverOff();
-      }
-    });
+    document.documentElement.addEventListener('mouseover', hoverOn);
+    document.documentElement.addEventListener('mouseout', hoverOff);
 
     const loop = () => {
       ringX += (dotX - ringX) * 0.09;
@@ -46,6 +46,8 @@ export const CustomCursor = () => {
 
     return () => {
       window.removeEventListener('mousemove', move);
+      document.documentElement.removeEventListener('mouseover', hoverOn);
+      document.documentElement.removeEventListener('mouseout', hoverOff);
       cancelAnimationFrame(rafId);
     };
   }, []);

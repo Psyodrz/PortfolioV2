@@ -45,10 +45,10 @@ export const Projects = ({ repos, reposLoading, revealedSections }) => {
                 </div>
                 <div style={{ fontFamily:'Bebas Neue', fontSize:'clamp(4rem,15vw,8rem)', position:'absolute', right:'1.5rem', top:'0.5rem', color:colors.fg, opacity:0.05, pointerEvents:'none', zIndex:0 }}>00{idx+1}</div>
                 <h3 style={{ fontFamily:'Bebas Neue', fontSize:isFirst?'clamp(2.5rem,6vw,7rem)':'clamp(1.8rem,5vw,2.4rem)', color:colors.fg, margin:'0 0 1rem 0', position:'relative', zIndex:1 }}>
-                  {repo.name.toLowerCase().includes('horror')||repo.name.toLowerCase().includes('scifi') ? <GlitchText text={repo.name.replace(/-/g,' ')} colors={{ primary:'#FF3D00', secondary:'#FFD600' }} /> : repo.name.replace(/-/g,' ')}
+                  {repo.name.toLowerCase().includes('horror')||repo.name.toLowerCase().includes('scifi') ? <GlitchText>{repo.name.replace(/-/g,' ')}</GlitchText> : repo.name.replace(/-/g,' ')}
                 </h3>
                 <div style={{ display:'flex', gap:'0.5rem', flexWrap:'wrap', marginBottom:'1.5rem' }}>
-                  {(repo.language?[repo.language,'JavaScript','React']:['Code']).map((t,i)=>(
+                  {(repo.language ? [repo.language, ...(repo.topics || []).slice(0, 2)] : ['Code']).filter(Boolean).map((t,i)=>(
                     <span key={`${t}-${i}`} style={{ border:`1px solid ${colors.border}`, padding:'0.2rem 0.6rem', fontFamily:'DM Mono', fontSize:'0.6rem', color:colors.muted, borderRadius:50 }}>{t}</span>
                   ))}
                 </div>

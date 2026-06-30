@@ -1,20 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import { GlobalStyles } from './styles/GlobalStyles';
-import { PhantomCursor } from './components/PhantomCursor';
+import { TubesCursor } from './components/TubesCursor';
 import { Preloader } from './components/Preloader';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { TechStack } from './components/TechStack';
+import ParticleText from './components/ParticleText';
 import { Projects } from './components/Projects';
 import { Timeline } from './components/Timeline';
 import { Contact } from './components/Contact';
 import { LaserStatsSection } from './components/LaserStatsSection';
 import Skills from './components/Skills';
+import GithubActivity from './components/GithubActivity';
 import { Footer } from './components/Footer';
 import Lenis from 'lenis';
-import 'lenis/dist/lenis.css';
+import 'lenis/dist/lenis.css'; // lenis@1.x ships CSS here
 
 function AppContent() {
   const [phase, setPhase] = useState('counting'); // 'counting' | 'hold' | 'exit' | 'done'
@@ -30,7 +32,17 @@ function AppContent() {
         if (!res.ok) throw new Error('API Rate limit or network error');
         const data = await res.json();
         
-        const priorityNames = ['AutoCode-AI', 'FaceDetectionApp', 'PortfolioV2', 'SciFi-Horror-Game', 'AI-HackerRank'];
+        const priorityNames = [
+          'PortfolioV2',
+          'Rakshak-AI',
+          'face-detection-app',
+          'horror-hunter-arena',
+          'SentinelAI',
+          'FaceVault',
+          'ai-code-generator',
+          'dreamscape-frontend',
+          'dreamscape-backend'
+        ];
         let featured = [];
         let rest = [];
         
@@ -92,14 +104,16 @@ function AppContent() {
     // Expose lenis globally so navigation links can programmatically scroll
     window.lenis = lenis;
 
+    let rafId;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(rafId);
       delete window.lenis;
       lenis.destroy();
     };
@@ -131,19 +145,21 @@ function AppContent() {
   return (
     <>
       <GlobalStyles />
-      <PhantomCursor />
+      <TubesCursor />
       <Preloader phase={phase} setPhase={setPhase} />
       
       <div style={{ opacity: phase === 'done' ? 1 : 0, transition: 'opacity 0.8s' }}>
         <Navigation />
         <main>
-          <Hero phase={phase} />
+          <Hero phase={phase} totalRepos={!reposLoading ? repos.featured.length + repos.rest.length : null} />
           <About revealedSections={revealedSections} />
+          <ParticleText />
           <TechStack revealedSections={revealedSections} />
           <Skills />
           <LaserStatsSection />
           <Projects repos={repos} reposLoading={reposLoading} revealedSections={revealedSections} />
           <Timeline phase={phase} revealedSections={revealedSections} />
+          <GithubActivity />
           <Contact />
         </main>
         <Footer />

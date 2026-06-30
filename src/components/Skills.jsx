@@ -367,7 +367,6 @@ function Skills() {
   const sysRef        = useRef(null);
   const scrollRef     = useRef(null);
   const timerRef      = useRef(null);
-  const { isDark }    = useTheme();
 
   const [activeSkillIndex, setActiveSkillIndex] = useState(0);
   const [activeSkill,      setActiveSkill]      = useState(SKILLS[0]);

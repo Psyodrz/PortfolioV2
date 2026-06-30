@@ -4,7 +4,7 @@ import DecryptedText from './DecryptedText';
 import Magnet from './Magnet';
 import { IDENTITY, ROLES, BIO, HERO_STATS } from '../config/siteMeta';
 
-export const Hero = ({ phase }) => {
+export const Hero = ({ phase, totalRepos }) => {
   const { colors, isDark } = useTheme();
   const canvasRef       = useRef(null);
   const canvasRafRef    = useRef(null);
@@ -142,17 +142,21 @@ export const Hero = ({ phase }) => {
           <div style={{ display:'flex', gap:'2.5rem', textAlign:'right' }}>
             {HERO_STATS.map(stat => (
               <div key={stat.lbl}>
-                <div style={{ fontFamily:'Bebas Neue', fontSize:'2.2rem', lineHeight:1 }}>{stat.val}</div>
+                <div style={{ fontFamily:'Bebas Neue', fontSize:'2.2rem', lineHeight:1 }}>
+                  {stat.lbl === 'Repos' && totalRepos !== null ? `${totalRepos}+` : stat.val}
+                </div>
                 <div style={{ fontFamily:'DM Mono', fontSize:'0.55rem', letterSpacing:'0.25em', textTransform:'uppercase', color:colors.muted, marginTop:4 }}>{stat.lbl}</div>
               </div>
             ))}
-            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'0.4rem', marginLeft:'1rem' }}>
-              <div style={{ width:1, height:55, background:`linear-gradient(to bottom, ${colors.fg}, transparent)`, animation:'scrollDrop 2.2s ease-in-out infinite' }} />
-              <span style={{ fontFamily:'DM Mono', fontSize:'0.5rem', letterSpacing:'0.3em', color:colors.muted, writingMode:'vertical-lr' }}>SCROLL</span>
-            </div>
           </div>
         </div>
         <div style={{ position:'absolute', bottom:'-clamp(3rem,6vw,7rem)', left:'-clamp(1.5rem,5vw,5rem)', right:'-clamp(1.5rem,5vw,5rem)', height:1, background:`linear-gradient(to right, transparent 0%, ${colors.accent} 30%, ${colors.accentB} 70%, transparent 100%)`, opacity:0.6 }} />
+      </div>
+
+      {/* Floating Scroll Indicator */}
+      <div style={{ position:'absolute', bottom:'clamp(1rem, 3vw, 2.5rem)', right:'clamp(1rem, 3vw, 2.5rem)', display:'flex', flexDirection:'column', alignItems:'center', gap:'0.4rem', zIndex: 10 }}>
+        <div style={{ width:1, height:55, background:`linear-gradient(to bottom, ${colors.fg}, transparent)`, animation:'scrollDrop 2.2s ease-in-out infinite' }} />
+        <span style={{ fontFamily:'DM Mono', fontSize:'0.5rem', letterSpacing:'0.3em', color:colors.muted, writingMode:'vertical-lr' }}>SCROLL</span>
       </div>
     </section>
   );

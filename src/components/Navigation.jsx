@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../ThemeContext';
 import { SunIcon, MoonIcon } from './Icons';
+import { IDENTITY } from '../config/siteMeta';
 
 export const Navigation = () => {
   const { colors, theme, toggleTheme, isDark } = useTheme();
@@ -37,11 +38,11 @@ export const Navigation = () => {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <a className="desktop-only" href="https://github.com/Psyodrz" target="_blank" rel="noreferrer" style={{ fontFamily: 'DM Mono', fontSize: '0.65rem', color: colors.muted, textDecoration: 'none', transition: 'color 0.2s', letterSpacing: '0.1em' }} onMouseEnter={e => e.currentTarget.style.color = colors.fg} onMouseLeave={e => e.currentTarget.style.color = colors.muted}>GITHUB</a>
+          <a className="desktop-only" href={IDENTITY.githubUrl} target="_blank" rel="noreferrer" style={{ fontFamily: 'DM Mono', fontSize: '0.65rem', color: colors.muted, textDecoration: 'none', transition: 'color 0.2s', letterSpacing: '0.1em' }} onMouseEnter={e => e.currentTarget.style.color = colors.fg} onMouseLeave={e => e.currentTarget.style.color = colors.muted}>GITHUB</a>
           <button onClick={toggleTheme} style={{ background: 'none', border: `1px solid ${colors.border}`, color: colors.fg, padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s', borderRadius: '50%' }} onMouseEnter={e => { e.currentTarget.style.borderColor = colors.accent; e.currentTarget.style.backgroundColor = 'rgba(255,61,0,0.05)'; }} onMouseLeave={e => { e.currentTarget.style.borderColor = colors.border; e.currentTarget.style.backgroundColor = 'transparent'; }}>
             {isDark ? <SunIcon color={colors.accent} /> : <MoonIcon color={colors.accent} />}
           </button>
-          <button className="mobile-nav-menu" onClick={() => setMenuOpen(true)} style={{ display: 'none', background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
+          <button className="mobile-menu-btn" onClick={() => setMenuOpen(true)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <div style={{ height: '1.5px', width: 24, backgroundColor: colors.fg }} />
               <div style={{ height: '1.5px', width: 24, backgroundColor: colors.fg }} />
@@ -69,7 +70,7 @@ export const Navigation = () => {
               {link}
             </a>
           ))}
-          <a href="https://github.com/Psyodrz" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)} style={{ fontFamily: 'DM Mono', fontSize: '1.2rem', color: colors.accent, textDecoration: 'none', marginTop: '2rem', letterSpacing: '0.2em' }}>GITHUB</a>
+          <a href={IDENTITY.githubUrl} target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)} style={{ fontFamily: 'DM Mono', fontSize: '1.2rem', color: colors.accent, textDecoration: 'none', marginTop: '2rem', letterSpacing: '0.2em' }}>GITHUB</a>
         </div>
       </div>
     </>

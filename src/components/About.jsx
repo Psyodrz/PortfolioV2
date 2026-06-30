@@ -38,7 +38,7 @@ export const About = ({ revealedSections }) => {
               {ABOUT_STATS.map((stat, idx) => (
                 <div key={stat.lbl} className="stats-item" style={{ opacity:revealedSections.has('about')?1:0, transform:revealedSections.has('about')?'translateY(0)':'translateY(20px)', transition:`all 0.8s cubic-bezier(0.16,1,0.3,1) ${(idx*200)+300}ms` }}>
                   <div style={{ fontFamily:'Bebas Neue', fontSize:'clamp(2.5rem,4vw,4.5rem)', color:colors.accent, lineHeight:1 }}>
-                    <CountUp end={stat.val} duration={1800} style={{ color:colors.accent }} /><span style={{ color:colors.fg, opacity:0.6 }}>+</span>
+                    <CountUp end={stat.val} duration={1.8} style={{ color:colors.accent }} /><span style={{ color:colors.fg, opacity:0.6 }}>+</span>
                   </div>
                   <div style={{ fontFamily:'DM Mono', fontSize:'0.55rem', letterSpacing:'0.2em', color:colors.muted, textTransform:'uppercase', marginTop:4 }}>{stat.lbl}</div>
                 </div>

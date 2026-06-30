@@ -131,6 +131,13 @@ export default function DecryptedText({
     return () => { if (interval) clearInterval(interval); };
   }, [isHovering, text, speed, maxIterations, sequential, revealDirection, characters, useOriginalCharsOnly]);
 
+  // animateOn === 'mount': fire the scramble immediately
+  useEffect(() => {
+    if (animateOn !== 'mount') return;
+    setIsHovering(true);
+    setHasAnimated(true);
+  }, [animateOn]);
+
   useEffect(() => {
     if (animateOn !== 'view' && animateOn !== 'both') return;
     const observerCallback = (entries) => {

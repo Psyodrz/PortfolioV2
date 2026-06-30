@@ -11,7 +11,7 @@ html.lenis, html.lenis-scrolling { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 .lenis.lenis-scrolling iframe { pointer-events: none; }
 
-html { scroll-behavior: smooth; cursor: none !important; overflow-x: hidden; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body { 
   margin: 0; 
   padding: 0; 
@@ -23,10 +23,15 @@ body {
     radial-gradient(ellipse at 80% 20%, rgba(255, 214, 0, 0.02) 0%, transparent 50%);
   color: ${colors.fg}; 
   transition: background-color 0.35s, color 0.35s; 
-  cursor: none !important; 
   width: 100%;
 }
-* { box-sizing: border-box; cursor: none !important; }
+* { box-sizing: border-box; }
+
+/* Custom cursor only on devices that support hover (not touch) */
+@media (hover: hover) and (pointer: fine) {
+  html, body, * { cursor: none !important; }
+}
+
 .container { max-width: 1400px; margin: 0 auto; width: 100%; position: relative; padding: 0 16px; }
 #about .grid { display: grid; grid-template-columns: 45% 55%; gap: 4rem; width: 100%; overflow: hidden; }
 #about .grid > * { min-width: 0; overflow: hidden; }
@@ -34,6 +39,9 @@ body {
 ::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-thumb { background: ${colors.accent}; }
 ::-webkit-scrollbar-track { background: ${colors.bg}; }
+
+/* Hamburger: hidden on desktop, visible on mobile */
+.mobile-menu-btn { display: none !important; }
 
 @keyframes slideUp { from { transform: translateY(105%); } to { transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -76,6 +84,7 @@ body {
 /* ===== MOBILE (≤767px) ===== */
 @media (max-width: 767px) {
   .desktop-only { display: none !important; }
+  .mobile-menu-btn { display: flex !important; }
   
   /* Hero */
   #hero { padding-top: 100px !important; }
@@ -165,6 +174,12 @@ body {
   /* Footer */
   #footer .footer-content { justify-content: center !important; }
   #footer .footer-content > div:last-child { align-items: flex-start; }
+  #footer .footer-content > div > div:last-child { 
+    flex-direction: column !important; 
+    gap: 0.5rem !important; 
+    align-items: center !important;
+    text-align: center !important;
+  }
 
   /* Touch targets */
   a, button { min-height: 44px; }
@@ -184,6 +199,12 @@ body {
   #contact h3 { font-size: clamp(1.5rem, 5vw, 2.5rem) !important; }
   
   section { padding-left: clamp(1rem, 4vw, 1.5rem) !important; padding-right: clamp(1rem, 4vw, 1.5rem) !important; }
+  
+  /* Footer stacks on very small screens */
+  #footer .footer-content > div > div:last-child { 
+    flex-direction: column !important; 
+    gap: 0.8rem !important;
+  }
 }
 
 .revealed { animation: revealUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }

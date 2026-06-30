@@ -3,12 +3,14 @@ import { useTheme } from '../ThemeContext';
 import { CheckIcon, ExternalLinkIcon } from './Icons';
 import Magnet from './Magnet';
 import BlurText from './BlurText';
+import { IDENTITY } from '../config/siteMeta';
 
 
 export const Contact = () => {
   const { colors } = useTheme();
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [formSent, setFormSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   return (
     <section id="contact" data-section="contact" style={{ position: 'relative', overflow: 'hidden', padding: 'clamp(5rem,8vw,10rem) clamp(1.5rem,5vw,5rem)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -17,7 +19,7 @@ export const Contact = () => {
       
       <div className="container" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
         <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '3rem' }}>
-          <span style={{ fontFamily: 'Bebas Neue', fontSize: '0.9rem', letterSpacing: '0.3em', color: colors.muted }}>05</span>
+          <span style={{ fontFamily: 'Bebas Neue', fontSize: '0.9rem', letterSpacing: '0.3em', color: colors.muted }}>06</span>
           <div style={{ width: 60, height: 1, backgroundColor: colors.border }} />
           <span style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', letterSpacing: '0.35em', color: colors.muted, textTransform: 'uppercase' }}>CONTACT</span>
         </div>
@@ -57,8 +59,8 @@ export const Contact = () => {
 
             <div style={{ display: 'flex', gap: '1.5rem', marginTop: '2rem' }}>
               {[
-                { name: 'GitHub', url: 'https://github.com/Psyodrz' },
-                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/aditya-srivastava/' },
+                { name: 'GitHub', url: IDENTITY.githubUrl },
+                { name: 'LinkedIn', url: IDENTITY.linkedin },
                 { name: 'Portfolio', url: 'https://psyodrz.github.io/psyodrz/' }
               ].map(social => (
                 <a key={social.name} href={social.url} target="_blank" rel="noreferrer" style={{ fontFamily: 'DM Mono', fontSize: '0.65rem', color: colors.muted, textDecoration: 'none', position: 'relative', display: 'flex', alignItems: 'center', gap: '4px', minHeight: 44, minWidth: 44 }} onMouseEnter={e => { e.currentTarget.style.color = colors.fg; e.currentTarget.style.textDecoration = 'underline'; }} onMouseLeave={e => { e.currentTarget.style.color = colors.muted; e.currentTarget.style.textDecoration = 'none'; }}>
@@ -74,7 +76,42 @@ export const Contact = () => {
                 MESSAGE SENT
               </div>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); setFormSent(true); }} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                const form = e.target;
+                const name = form.elements[0].value;
+                const email = form.elements[1].value;
+                const subject = form.elements[2].value;
+                const message = form.elements[3].value;
+                
+                try {
+                  const response = await fetch('/api/sendEmail', {
+                    method: "POST",
+                    headers: { 
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                      from: 'Portfolio Contact <onboarding@resend.dev>',
+                      to: 'adisrivastav23@gmail.com',
+                      reply_to: email,
+                      subject: `New Portfolio Message: ${subject}`,
+                      html: `<h3>New Message from Portfolio</h3><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong></p><p>${message}</p>`
+                    })
+                  });
+                  
+                  if (response.ok) {
+                    setFormSent(true);
+                  } else {
+                    alert("Something went wrong! Please try again.");
+                  }
+                } catch (error) {
+                  alert("Failed to send message. Please check your connection.");
+                } finally {
+                  setLoading(false);
+                }
+              }} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 {['Name', 'Email', 'Subject'].map(field => (
                   <div key={field} style={{ position: 'relative', borderBottom: `1px solid ${colors.border}`, padding: '0.75rem 0' }} className="form-group">
                     <input type={field === 'Email' ? 'email' : 'text'} required placeholder={field} style={{ background: 'none', border: 'none', outline: 'none', color: colors.fg, width: '100%', fontFamily: 'Outfit', fontSize: '0.9rem', minHeight: 44 }} />
@@ -84,8 +121,8 @@ export const Contact = () => {
                   <textarea required placeholder="Message" rows={4} style={{ background: 'none', border: 'none', outline: 'none', color: colors.fg, width: '100%', fontFamily: 'Outfit', fontSize: '0.9rem', resize: 'vertical' }} />
                 </div>
                 <Magnet padding={80} magnetStrength={3} wrapperClassName="submit-magnet-wrap" innerClassName="submit-magnet-inner" style={{ width: '100%', display: 'block' }}>
-                  <button type="submit" style={{ width: '100%', marginTop: '1rem', background: colors.accent, color: '#FFF', padding: '1rem', fontFamily: 'Bebas Neue', fontSize: '1.1rem', letterSpacing: '0.15em', border: 'none', cursor: 'pointer', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)', minHeight: 48 }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = colors.accentB; e.currentTarget.style.color = '#070707'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = colors.accent; e.currentTarget.style.color = '#FFF'; }} onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'} onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}>
-                    SEND MESSAGE
+                  <button type="submit" disabled={loading} style={{ width: '100%', marginTop: '1rem', background: loading ? colors.muted : colors.accent, color: '#FFF', padding: '1rem', fontFamily: 'Bebas Neue', fontSize: '1.1rem', letterSpacing: '0.15em', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)', minHeight: 48 }} onMouseEnter={e => { if(!loading){ e.currentTarget.style.backgroundColor = colors.accentB; e.currentTarget.style.color = '#070707'; } }} onMouseLeave={e => { if(!loading){ e.currentTarget.style.backgroundColor = colors.accent; e.currentTarget.style.color = '#FFF'; } }} onMouseDown={e => { if(!loading) e.currentTarget.style.transform = 'scale(0.98)' }} onMouseUp={e => { if(!loading) e.currentTarget.style.transform = 'scale(1)' }}>
+                    {loading ? 'SENDING...' : 'SEND MESSAGE'}
                   </button>
                 </Magnet>
               </form>

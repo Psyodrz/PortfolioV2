@@ -40,7 +40,7 @@ export const METRICS = {
   techMastered:  10,  // unique techs (LaserStats)
   heroRepos:     19,  // repos stat in Hero
   heroDomains:    4,  // domains stat in Hero
-  heroYears:      2,  // years stat in Hero (intentionally 2 vs 3 — update if needed)
+  heroYears:      3,  // years stat in Hero
 };
 
 /* ── Bio copy ─────────────────────────────────── */

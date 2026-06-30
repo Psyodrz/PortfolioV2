@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from '../ThemeContext';
+import { IDENTITY } from '../config/siteMeta';
 
 export const Footer = () => {
   const { colors } = useTheme();
@@ -15,8 +16,8 @@ export const Footer = () => {
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 clamp(1rem, 4vw, 3rem)', marginTop: '2rem' }}>
-          <div style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', color: colors.muted, textTransform: 'uppercase' }}>© 2025 ADITYA SRIVASTAVA</div>
-          <div style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', color: colors.muted, textTransform: 'uppercase' }}>BASED IN INDIA</div>
+          <div style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', color: colors.muted, textTransform: 'uppercase' }}>© {new Date().getFullYear()} {IDENTITY.fullName.toUpperCase()}</div>
+          <div style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', color: colors.muted, textTransform: 'uppercase' }}>{IDENTITY.location.toUpperCase()}</div>
           <div style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', color: colors.muted, textTransform: 'uppercase' }}>DESIGNED & ENGINEERED FROM SCRATCH</div>
         </div>
       </div>
