@@ -36,7 +36,7 @@ const StatItem = ({ value, suffix, display, label, delay, trigger, theme }) => {
     }}>
       <div style={{
         fontFamily: "'Bebas Neue', cursive",
-        fontSize: 'clamp(64px, 9vw, 120px)',
+        fontSize: 'clamp(36px, 9vw, 120px)',
         lineHeight: 1,
         color: theme.numberColor,
         textShadow: theme.numberGlow,

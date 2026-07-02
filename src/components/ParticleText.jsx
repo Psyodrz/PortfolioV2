@@ -425,19 +425,21 @@ const ParticleText = () => {
             width: 5, height: 5, borderRadius: '50%',
             background: colors.accent, opacity: 0.6,
           }} />
-          CLICK & DRAG TO SCATTER
+          {('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 'TAP & DRAG TO SCATTER' : 'CLICK & DRAG TO SCATTER'}
         </span>
-        <span style={{
-          fontFamily: "'DM Mono', monospace", fontSize: '0.55rem',
-          letterSpacing: '0.15em', color: colors.muted,
-          display: 'flex', alignItems: 'center', gap: 6,
-        }}>
+        {!('ontouchstart' in window) && navigator.maxTouchPoints === 0 && (
           <span style={{
-            width: 5, height: 5, borderRadius: '50%',
-            background: colors.accentB, opacity: 0.6,
-          }} />
-          RIGHT-CLICK TO DESTROY
-        </span>
+            fontFamily: "'DM Mono', monospace", fontSize: '0.55rem',
+            letterSpacing: '0.15em', color: colors.muted,
+            display: 'flex', alignItems: 'center', gap: 6,
+          }}>
+            <span style={{
+              width: 5, height: 5, borderRadius: '50%',
+              background: colors.accentB, opacity: 0.6,
+            }} />
+            RIGHT-CLICK TO DESTROY
+          </span>
+        )}
         <span style={{
           fontFamily: "'DM Mono', monospace", fontSize: '0.55rem',
           letterSpacing: '0.15em', color: colors.muted,

@@ -30,7 +30,7 @@ export const Contact = () => {
             <span style={{ color: 'transparent', WebkitTextStroke: `2px ${colors.fg}` }}>BUILD</span>
           </h2>
         </div>
-        <h3 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(2rem,5vw,6rem)', color: colors.accent, marginBottom: '3rem', margin: '0.5rem 0 0 0' }}>SOMETHING AMAZING TOGETHER</h3>
+        <h3 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(1.5rem,5vw,6rem)', color: colors.accent, marginBottom: '3rem', margin: '0.5rem 0 0 0', wordBreak: 'break-word', overflowWrap: 'break-word' }}>SOMETHING AMAZING TOGETHER</h3>
 
         <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
           <div>

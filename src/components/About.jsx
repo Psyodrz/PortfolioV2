@@ -9,6 +9,12 @@ import { ABOUT_STATS, BIO } from '../config/siteMeta';
 export const About = ({ revealedSections }) => {
   const { colors } = useTheme();
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  React.useEffect(() => {
+    const isTouch = window.matchMedia('(hover: none)').matches || 'ontouchstart' in window;
+    setIsTouchDevice(isTouch);
+  }, []);
 
   const skillCards = [
     { icon: <GameIcon size={24} />, title: 'Game Development', stack: 'Unity | Three.js | WebGL | C# | C++', count: '3 Projects', description: 'Building immersive 3D experiences with Unity, Three.js & WebGL. From physics engines to shader programming.' },
@@ -54,10 +60,10 @@ export const About = ({ revealedSections }) => {
                 const isHovered = hoveredCard === idx;
                 return (
                   <ScrollFloat key={cardInfo.title} amplitude={6} period={3} delay={idx*0.4}>
-                    <div className="skill-card" tabIndex={0} onMouseEnter={()=>setHoveredCard(idx)} onMouseLeave={()=>setHoveredCard(null)} onFocus={()=>setHoveredCard(idx)} onBlur={()=>setHoveredCard(null)} style={{ border:`1px solid ${isHovered?'rgba(231,76,60,0.4)':colors.border}`, padding:'clamp(1.5rem,4vw,2.5rem)', paddingBottom:'5rem', background:colors.card, position:'relative', opacity:revealedSections.has('about')?1:0, transform:revealedSections.has('about')?'translateY(0)':'translateY(40px)', transition:'all 0.3s cubic-bezier(0.4,0,0.2,1)', height:'auto', minHeight:'fit-content', boxShadow:isHovered?'0 0 20px rgba(231,76,60,0.3)':'none', outline:'none' }}>
+                    <div className="skill-card" tabIndex={0} onMouseEnter={()=>setHoveredCard(idx)} onMouseLeave={()=>setHoveredCard(null)} onFocus={()=>setHoveredCard(idx)} onBlur={()=>setHoveredCard(null)} style={{ border:`1px solid ${isHovered?'rgba(231,76,60,0.4)':colors.border}`, padding:'clamp(1.5rem,4vw,2.5rem)', paddingBottom: isTouchDevice ? 'clamp(1.5rem,4vw,2.5rem)' : '5rem', background:colors.card, position:'relative', opacity:revealedSections.has('about')?1:0, transform:revealedSections.has('about')?'translateY(0)':'translateY(40px)', transition:'all 0.3s cubic-bezier(0.4,0,0.2,1)', height:'auto', minHeight:'fit-content', boxShadow:isHovered?'0 0 20px rgba(231,76,60,0.3)':'none', outline:'none' }}>
                       <h3 style={{ fontFamily:'Bebas Neue', fontSize:'clamp(1.4rem,3vw,2rem)', color:colors.fg, margin:'0 0 1rem 0', display:'flex', alignItems:'center', gap:'0.8rem', lineHeight:1.1 }}>{cardInfo.icon} {cardInfo.title}</h3>
                       <p style={{ fontFamily:'DM Mono', fontSize:'clamp(0.7rem,1.8vw,0.85rem)', color:colors.muted, margin:0, lineHeight:1.6 }}>{cardInfo.stack}</p>
-                      <div style={{ fontFamily:'DM Mono', fontSize:'0.75rem', lineHeight:1.6, color:'#aaa', marginTop:'1rem', opacity:isHovered?1:0, transform:isHovered?'translateY(0)':'translateY(8px)', transition:'opacity 0.25s ease, transform 0.25s ease', pointerEvents:isHovered?'auto':'none' }}>{cardInfo.description}</div>
+                      <div style={{ fontFamily:'DM Mono', fontSize:'0.75rem', lineHeight:1.6, color:'#aaa', marginTop:'1rem', opacity:(isHovered||isTouchDevice)?1:0, transform:(isHovered||isTouchDevice)?'translateY(0)':'translateY(8px)', transition:'opacity 0.25s ease, transform 0.25s ease', pointerEvents:(isHovered||isTouchDevice)?'auto':'none' }}>{cardInfo.description}</div>
                       <div style={{ position:'absolute', bottom:'1.2rem', right:'1.2rem', fontFamily:'DM Mono', fontSize:'0.6rem', color:colors.accent, fontWeight:500, opacity:0.8 }}>{cardInfo.count}</div>
                     </div>
                   </ScrollFloat>

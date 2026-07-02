@@ -607,7 +607,7 @@ function Skills() {
               {String(SKILLS.length).padStart(2, '0')}
             </span>
             <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.18)', letterSpacing: '0.15em', textTransform: 'uppercase', marginLeft: 'auto' }}>
-              Drag · Click
+              {('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 'Tap · Swipe' : 'Drag · Click'}
             </span>
           </div>
         </div>

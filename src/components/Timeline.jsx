@@ -40,6 +40,125 @@ export const Timeline = ({ phase, revealedSections }) => {
   const desktopPath = "M 50,0 L 50,5 L 90,5 L 90,15 L 50,15 L 50,22.5 L 10,22.5 L 10,32.5 L 50,32.5 L 50,40 L 90,40 L 90,50 L 50,50 L 50,57.5 L 10,57.5 L 10,67.5 L 50,67.5 L 50,75 L 90,75 L 90,85 L 50,85 L 50,100";
   const mobilePath = "M 15,0 L 15,100";
 
+  /* ── Timeline Card Content (shared between desktop/mobile) ── */
+  const TimelineCardContent = ({ item }) => (
+    <div style={{ 
+      border: `1px solid ${colors.accent}30`, 
+      padding: isMobile ? 'clamp(1.2rem, 4vw, 1.8rem)' : '2rem', 
+      background: isDark 
+        ? `linear-gradient(135deg, ${colors.card} 0%, rgba(5,5,5,0.95) 100%)`
+        : `linear-gradient(135deg, ${colors.card} 0%, rgba(240,240,240,0.95) 100%)`, 
+      backdropFilter: 'blur(12px)',
+      boxShadow: isDark 
+        ? `0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1)`
+        : `0 20px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5)`,
+      borderRadius: '16px',
+      overflowWrap: 'break-word', 
+      wordBreak: 'break-word' 
+    }}>
+      <div style={{ fontFamily: 'Bebas Neue', fontSize: isMobile ? 'clamp(2rem, 8vw, 3rem)' : '3rem', color: colors.accent, lineHeight: 1, textShadow: `0 0 20px ${colors.accent}40` }}>{item.yr}</div>
+      <div style={{ fontFamily: 'Bebas Neue', fontSize: isMobile ? 'clamp(1.1rem, 4vw, 1.5rem)' : '1.5rem', color: colors.fg, marginTop: '0.8rem', letterSpacing: '0.05em' }}>{item.title}</div>
+      <div style={{ fontFamily: 'DM Mono', fontSize: '0.65rem', color: colors.muted, marginBottom: '0.8rem', marginTop: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.sub}</div>
+      <BlurText 
+        text={item.body} 
+        delay={20} 
+        animateBy="words" 
+        direction="top" 
+        style={{ fontFamily: 'Outfit', fontSize: isMobile ? '0.82rem' : '0.9rem', lineHeight: 1.6, color: colors.muted, fontWeight: 300, margin: 0 }} 
+      />
+    </div>
+  );
+
+  /* ══════════════════════════════════════════════════════════════
+     MOBILE LAYOUT — flow-based vertical timeline
+     ══════════════════════════════════════════════════════════════ */
+  if (isMobile) {
+    return (
+      <section id="timeline" data-section="timeline" style={{ padding: 'clamp(4rem,8vw,10rem) clamp(1rem,4vw,1.5rem)', position: 'relative', overflow: 'hidden' }}>
+        <div className="container" style={{ position: 'relative' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '3rem' }}>
+            <span style={{ fontFamily: 'Bebas Neue', fontSize: '0.9rem', letterSpacing: '0.3em', color: colors.muted }}>05</span>
+            <div style={{ width: 60, height: 1, backgroundColor: colors.border }} />
+            <span style={{ fontFamily: 'DM Mono', fontSize: '0.6rem', letterSpacing: '0.35em', color: colors.muted, textTransform: 'uppercase' }}>TIMELINE</span>
+          </div>
+
+          <h2 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(3rem,8vw,5rem)', color: colors.fg, margin: '0 0 3rem 0' }}>THE JOURNEY</h2>
+
+          <div ref={containerRef} style={{ position: 'relative', paddingLeft: '2.5rem' }}>
+            {/* Vertical line */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: '0.6rem',
+              width: '2px',
+              height: '100%',
+              background: `linear-gradient(to bottom, transparent, ${colors.accent}60 10%, ${colors.accentB || colors.accent}60 90%, transparent)`,
+              zIndex: 0,
+            }} />
+            {/* Animated progress line */}
+            <motion.div 
+              style={{ 
+                position: 'absolute',
+                top: 0,
+                left: '0.6rem',
+                width: '2px',
+                height: '100%',
+                background: `linear-gradient(to bottom, ${colors.accent}, ${colors.accentB || colors.accent})`,
+                transformOrigin: 'top',
+                scaleY: smoothProgress,
+                zIndex: 1,
+                filter: `drop-shadow(0 0 6px ${colors.accent})`,
+              }} 
+            />
+
+            {/* Cards in flow */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(2rem, 6vw, 3rem)' }}>
+              {timelineData.map((item, idx) => (
+                <div key={item.title} style={{ position: 'relative' }}>
+                  {/* Dot */}
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: false, margin: "-40px" }}
+                    transition={{ duration: 0.4 }}
+                    style={{
+                      position: 'absolute',
+                      top: '1.5rem',
+                      left: '-2.5rem',
+                      width: 14,
+                      height: 14,
+                      borderRadius: '50%',
+                      backgroundColor: colors.bg,
+                      border: `2px solid ${colors.accent}`,
+                      boxShadow: `0 0 12px ${colors.accent}`,
+                      zIndex: 5,
+                      transform: 'translateX(calc(-50% + 0.6rem))',
+                    }}
+                  >
+                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 4, height: 4, borderRadius: '50%', backgroundColor: colors.accent }} />
+                  </motion.div>
+
+                  {/* Card */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, margin: "-30px" }}
+                    transition={{ duration: 0.6, type: "spring", stiffness: 80, damping: 20 }}
+                  >
+                    <TimelineCardContent item={item} />
+                  </motion.div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     DESKTOP LAYOUT — absolute positioned with SVG path (unchanged)
+     ══════════════════════════════════════════════════════════════ */
   return (
     <section id="timeline" data-section="timeline" style={{ padding: 'clamp(5rem,8vw,10rem) clamp(1.5rem,5vw,5rem)', position: 'relative' }}>
       <div className="container" style={{ position: 'relative' }}>
@@ -51,7 +170,7 @@ export const Timeline = ({ phase, revealedSections }) => {
 
         <h2 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(3rem,6vw,8rem)', color: colors.fg, margin: '0 0 6rem 0' }}>THE JOURNEY</h2>
 
-        <div ref={containerRef} style={{ position: 'relative', height: isMobile ? '200vh' : '280vh', marginTop: '4rem' }}>
+        <div ref={containerRef} style={{ position: 'relative', height: '280vh', marginTop: '4rem' }}>
           
           <svg 
             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }}
@@ -67,7 +186,7 @@ export const Timeline = ({ phase, revealedSections }) => {
               </linearGradient>
             </defs>
             <path 
-              d={isMobile ? mobilePath : desktopPath} 
+              d={desktopPath} 
               fill="none" 
               stroke={colors.border} 
               strokeWidth="0.15" 
@@ -77,7 +196,7 @@ export const Timeline = ({ phase, revealedSections }) => {
             />
             
             <motion.path 
-              d={isMobile ? mobilePath : desktopPath}
+              d={desktopPath}
               fill="none"
               stroke="url(#routeGradient)"
               strokeWidth="2.5"
@@ -95,25 +214,23 @@ export const Timeline = ({ phase, revealedSections }) => {
             return (
               <React.Fragment key={item.title}>
                 {/* Connecting Laser Line */}
-                {!isMobile && (
-                  <motion.div 
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    viewport={{ once: false, margin: "-100px" }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    style={{
-                      position: 'absolute',
-                      top: `${yPos}%`,
-                      left: isRightCard ? '10%' : '45%',
-                      width: '45%',
-                      height: '1px',
-                      background: `linear-gradient(to ${isRightCard ? 'right' : 'left'}, ${colors.accent}, transparent)`,
-                      opacity: 0.4,
-                      transformOrigin: isRightCard ? 'left' : 'right',
-                      zIndex: 1
-                    }} 
-                  />
-                )}
+                <motion.div 
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: false, margin: "-100px" }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  style={{
+                    position: 'absolute',
+                    top: `${yPos}%`,
+                    left: isRightCard ? '10%' : '45%',
+                    width: '45%',
+                    height: '1px',
+                    background: `linear-gradient(to ${isRightCard ? 'right' : 'left'}, ${colors.accent}, transparent)`,
+                    opacity: 0.4,
+                    transformOrigin: isRightCard ? 'left' : 'right',
+                    zIndex: 1
+                  }} 
+                />
 
                 {/* Tracking Dot on the Path */}
                 <motion.div 
@@ -124,7 +241,7 @@ export const Timeline = ({ phase, revealedSections }) => {
                   style={{ 
                     position: 'absolute', 
                     top: `${yPos}%`, 
-                    left: isMobile ? '15%' : (isRightCard ? '10%' : '90%'), 
+                    left: isRightCard ? '10%' : '90%', 
                     transform: 'translate(-50%, -50%)', 
                     width: 14, height: 14, borderRadius: '50%', 
                     backgroundColor: colors.bg, 
@@ -140,8 +257,8 @@ export const Timeline = ({ phase, revealedSections }) => {
                 <div style={{ 
                   position: 'absolute', 
                   top: `${yPos}%`, 
-                  left: isMobile ? '25%' : (isRightCard ? '55%' : '10%'), 
-                  width: isMobile ? '70%' : '35%', 
+                  left: isRightCard ? '55%' : '10%', 
+                  width: '35%', 
                   transform: 'translateY(-50%)',
                   zIndex: 10,
                   perspective: '1200px'
@@ -162,31 +279,7 @@ export const Timeline = ({ phase, revealedSections }) => {
                       showTooltip={false}
                       showMobileWarning={false}
                     >
-                      <div style={{ 
-                        border: `1px solid ${colors.accent}30`, 
-                        padding: '2rem', 
-                        background: isDark 
-                          ? `linear-gradient(135deg, ${colors.card} 0%, rgba(5,5,5,0.95) 100%)`
-                          : `linear-gradient(135deg, ${colors.card} 0%, rgba(240,240,240,0.95) 100%)`, 
-                        backdropFilter: 'blur(12px)',
-                        boxShadow: isDark 
-                          ? `0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1)`
-                          : `0 20px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5)`,
-                        borderRadius: '16px',
-                        overflowWrap: 'break-word', 
-                        wordBreak: 'break-word' 
-                      }}>
-                        <div style={{ fontFamily: 'Bebas Neue', fontSize: '3rem', color: colors.accent, lineHeight: 1, textShadow: `0 0 20px ${colors.accent}40` }}>{item.yr}</div>
-                        <div style={{ fontFamily: 'Bebas Neue', fontSize: '1.5rem', color: colors.fg, marginTop: '1rem', letterSpacing: '0.05em' }}>{item.title}</div>
-                        <div style={{ fontFamily: 'DM Mono', fontSize: '0.65rem', color: colors.muted, marginBottom: '1rem', marginTop: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.sub}</div>
-                        <BlurText 
-                          text={item.body} 
-                          delay={20} 
-                          animateBy="words" 
-                          direction="top" 
-                          style={{ fontFamily: 'Outfit', fontSize: '0.9rem', lineHeight: 1.6, color: colors.muted, fontWeight: 300, margin: 0 }} 
-                        />
-                      </div>
+                      <TimelineCardContent item={item} />
                     </TiltedCard>
                   </motion.div>
                 </div>

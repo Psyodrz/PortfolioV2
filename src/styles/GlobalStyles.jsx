@@ -63,22 +63,6 @@ body {
   #work .featured-grid { gap: 1rem !important; }
   #contact .contact-grid { gap: 2.5rem !important; }
   #contact .laser-flow-layer { display: none !important; }
-
-  /* Timeline */
-  #timeline { padding-left: 1rem !important; padding-right: 1rem !important; overflow-x: hidden !important; }
-  #timeline .center-line { left: 1rem !important; }
-  #timeline .timeline-entry { 
-    width: auto !important; 
-    max-width: 100% !important; 
-    margin-left: 1.5rem !important; 
-    margin-right: 0 !important; 
-    text-align: left !important; 
-    transform: translateX(0) !important;
-  }
-  #timeline .timeline-dot { 
-    left: calc(-0.5rem - 5px) !important; 
-    right: auto !important; 
-  }
 }
 
 /* ===== MOBILE (≤767px) ===== */
@@ -150,7 +134,6 @@ body {
   #about .sticky-col { position: static !important; width: 100% !important; max-width: 100% !important; padding-right: 0 !important; overflow-wrap: break-word; }
   #about .stats-container { justify-content: space-between !important; gap: 1.5rem !important; }
   #about .stats-item { width: calc(50% - 1rem); }
-  #about .skill-card { padding-bottom: 3.5rem !important; }
   
   /* Tech Stack */
   #stack .logo-loop-container { height: 36px !important; margin-bottom: 2rem !important; }
@@ -163,23 +146,20 @@ body {
   #work .terminal-desc { display: block !important; color: ${colors.fg} !important; opacity: 0.8; }
   #work h2 { font-size: clamp(3rem, 12vw, 5rem) !important; }
   
-  /* Timeline */
+  /* Timeline — now handled entirely in JSX, just ensure no overflow */
+  #timeline { overflow-x: hidden !important; }
   #timeline h2 { font-size: clamp(3rem, 8vw, 5rem) !important; }
+  
+  /* Skills 3D section — ensure padding for bottom panel */
+  #skills { min-height: 500px !important; }
   
   /* Contact */
   #contact h2 { font-size: clamp(3rem, 12vw, 5rem) !important; }
   #contact .contact-grid { grid-template-columns: 1fr !important; gap: 3.5rem !important; }
   #contact input, #contact textarea { font-size: 16px !important; /* prevents iOS zoom */ }
 
-  /* Footer */
-  #footer .footer-content { justify-content: center !important; }
-  #footer .footer-content > div:last-child { align-items: flex-start; }
-  #footer .footer-content > div > div:last-child { 
-    flex-direction: column !important; 
-    gap: 0.5rem !important; 
-    align-items: center !important;
-    text-align: center !important;
-  }
+  /* GithubActivity — make stats row stack better */
+  .github-stats-bar { flex-direction: column !important; gap: 0.75rem !important; }
 
   /* Touch targets */
   a, button { min-height: 44px; }
@@ -196,15 +176,12 @@ body {
   #about .marquee-container { height: 70px !important; margin: 2rem 0 !important; }
   #about .marquee-container div { font-size: clamp(2rem, 10vw, 3.5rem) !important; }
   
-  #contact h3 { font-size: clamp(1.5rem, 5vw, 2.5rem) !important; }
+  #contact h3 { font-size: clamp(1.2rem, 4.5vw, 2.5rem) !important; }
   
   section { padding-left: clamp(1rem, 4vw, 1.5rem) !important; padding-right: clamp(1rem, 4vw, 1.5rem) !important; }
   
-  /* Footer stacks on very small screens */
-  #footer .footer-content > div > div:last-child { 
-    flex-direction: column !important; 
-    gap: 0.8rem !important;
-  }
+  /* Skills section — reduce bottom panel padding */
+  #skills > div:last-child { padding: 16px 14px !important; }
 }
 
 .revealed { animation: revealUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }

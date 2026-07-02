@@ -9,6 +9,12 @@ export const Projects = ({ repos, reposLoading, revealedSections }) => {
   const { colors, isDark } = useTheme();
   const [viewAllRepos, setViewAllRepos] = useState(false);
   const [hoveredProject, setHoveredProject] = useState(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  React.useEffect(() => {
+    const isTouch = window.matchMedia('(hover: none)').matches || 'ontouchstart' in window;
+    setIsTouchDevice(isTouch);
+  }, []);
 
   return (
     <section id="work" data-section="work" style={{ padding:'clamp(5rem,8vw,10rem) clamp(1.5rem,5vw,5rem)', background:isDark?'#070707':'#F0EBE0', position:'relative', zIndex:1 }}>
@@ -52,7 +58,7 @@ export const Projects = ({ repos, reposLoading, revealedSections }) => {
                     <span key={`${t}-${i}`} style={{ border:`1px solid ${colors.border}`, padding:'0.2rem 0.6rem', fontFamily:'DM Mono', fontSize:'0.6rem', color:colors.muted, borderRadius:50 }}>{t}</span>
                   ))}
                 </div>
-                <div style={{ overflow:'hidden', maxHeight:isHovered?'80px':'0px', opacity:isHovered?1:0, transform:isHovered?'translateY(0)':'translateY(8px)', transition:'max-height 0.3s ease, opacity 0.25s ease, transform 0.25s ease', marginBottom:isHovered?'2rem':'0' }}>
+                <div style={{ overflow:'hidden', maxHeight:(isHovered||isTouchDevice)?'80px':'0px', opacity:(isHovered||isTouchDevice)?1:0, transform:(isHovered||isTouchDevice)?'translateY(0)':'translateY(8px)', transition:'max-height 0.3s ease, opacity 0.25s ease, transform 0.25s ease', marginBottom:(isHovered||isTouchDevice)?'2rem':'0' }}>
                   <p style={{ fontFamily:'DM Mono', fontSize:'0.75rem', color:'#aaa', margin:0, lineHeight:1.6, maxWidth:'80%' }}>{repo.description||'Awesome project building the future.'}</p>
                 </div>
                 <div style={{ display:'flex', gap:'1.5rem' }}>
